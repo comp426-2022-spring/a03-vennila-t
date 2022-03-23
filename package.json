@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/comp426-2022-spring/a03-vennila-t#readme",
   "dependencies": {
+    "express": "^4.17.3",
     "yargs": "^17.4.0"
   }
 }
