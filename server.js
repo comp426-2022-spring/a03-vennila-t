@@ -16,14 +16,18 @@
 const express = require('express')
 const app = express()
 
+// define port variable
+const port = 5000
+
 // Start an app server
-const server = app.listen(HTTP_PORT, () => {
-    console.log('App listening on port %PORT%'.replace('%PORT%',HTTP_PORT))
+const server = app.listen(port, () => {
+    console.log('App listening on port %PORT%'.replace('%PORT%',port))
 });
 
 // Default API endpoint that returns 404 Not found for any endpoints that are not defined.
 app.use(function(req, res){
-    res.status(404).send('404 NOT FOUND')
+    res.status(404).send('404 NOT FOUND').end("Endpoint does not exist")
+    res.type("text/plain")
 });
 
 // Check endpoint at /app/ that returns 200 OK.
