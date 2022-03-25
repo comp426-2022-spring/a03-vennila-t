@@ -1,17 +1,5 @@
 // server.js file that takes an arbitrary port number as a command line argument (i.e. I should be able to run it with node server.js. The port should default to 5000 if no argument is given.
 
-
-
-//     Endpoint /app/flips/:number that returns JSON including an array of the raw random flips and a summary. Example below.
-//     Endpoint /app/flip/call/heads that returns the result of a random flip match against heads as JSON.
-//     Endpoint /app/flip/call/tails that returns the result of a random flip match against tails as JSON.
-//     ALL endpoints should return HTTP headers including a status code and the appropriate content type for the response.
-//     All of this should be in a Node package with "main" set to server.js.
-//     The test script defined in package.json should be set to "node server.js --port=5555"
-
-
-
-
 // Require Express.js
 const express = require('express')
 const app = express()
@@ -40,22 +28,84 @@ app.get('/app/', (req, res) => {
     res.end(res.statusCode+ ' ' +res.statusMessage)
 });
 
-
+function coinFlip() {
+    var coin = ["heads", "tails"];
+    return coin[Math.floor(Math.random()*coin.length)];
+  }
 // Endpoint /app/flip/ that returns JSON {"flip":"heads"}
 // or {"flip":"tails"} corresponding to the results of the random coin flip.
-app.get('/app/flip/:number', (req, res) => {
-    const flips = manyflips(req.params.number)
-	//Some
-	//expressions
-	//go
-	//here
+app.get('/app/flip', (req, res) => {
+    var flip = coinFlip()
+    res.status(200).json({'flip' : flip})
+    res.type("text/plain")
 });
 
+function coinFlips(flips) {
+    var i = 0;
+    var results = new Array();
+    while (i < flips) {
+      results[i] = coinFlip();
+      i++;
+    }
+    return results;
+}
 
+function countFlips(array) {
+    if(array.length == 0){
+      return;
+    }
+    var heads = 0;
+    var tails = 0;
+
+    for(var i = 0; i < array.length; i++){
+      if(array[i] == "heads"){
+        heads++;
+      }
+      else if(array[i] == "tails"){
+        tails++;
+      }
+    }
+    if(heads == 0){
+      return "{ tails: "+tails+" }";
+    }
+    else if(tails == 0){
+      return "{ heads: "+heads+" }";
+    }
+    return "{ heads: "+heads+", tails: "+tails+" }";
+}
+
+// Endpoint /app/flips/:number that returns JSON including an array of the raw random flips and a summary.
 app.get('/app/flips/:number', (req, res) => {
-    const flips = manyflips(req.params.number)
-	//Some
-	//expressions
-	//go
-	//here
+    const flips = coinFlips(req.params.number)
+    const countflips = countFlips(flips)
+    res.status(200).json({'raw': flips, 'summary': countflips})
+    res.type("text/plain")
+});
+
+function flipACoin(call) {
+    var flip = coinFlip();
+    var result = "";
+    if(call == flip){
+      result = "win";
+    }
+    else{
+      result = "lose";
+    }
+    return "{ call: "+call+", flip: "+flip+", result: "+result+" }";
+}
+
+// Endpoint /app/flip/call/heads that returns the result of a random flip match against heads as JSON.
+app.get('/app/flip/heads', (req, res) => {
+    var call = heads
+    var result = flipACoin(call)
+    res.status(200).json(result)
+    res.type("text/plain")
+});
+
+// Endpoint /app/flip/call/tails that returns the result of a random flip match against tails as JSON.
+app.get('/app/flip/tails', (req, res) => {
+    var call = tails
+    var result = flipACoin(call)
+    res.status(200).json(result)
+    res.type("text/plain")
 });
