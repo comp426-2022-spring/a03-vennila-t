@@ -92,13 +92,13 @@ function flipACoin(call) {
 }
 
 // Endpoint /app/flip/call/heads that returns the result of a random flip match against heads as JSON.
-app.get('/app/flip/heads', (req, res) => {
+app.get('/app/flip/call/heads', (req, res) => {
     res.status(200).json(flipACoin("heads"))
     res.type("text/plain")
 });
 
 // Endpoint /app/flip/call/tails that returns the result of a random flip match against tails as JSON.
-app.get('/app/flip/tails', (req, res) => {
+app.get('/app/flip/call/tails', (req, res) => {
     res.status(200).json(flipACoin("tails"))
     res.type("text/plain")
 });
@@ -106,6 +106,6 @@ app.get('/app/flip/tails', (req, res) => {
 
 // Default API endpoint that returns 404 Not found for any endpoints that are not defined.
 app.use(function(req, res){
-  res.status(404).send('404 NOT FOUND').end("Endpoint does not exist")
+  res.status(404).send('404 NOT FOUND')
   res.type("text/plain")
 });
