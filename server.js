@@ -75,7 +75,7 @@ function countFlips(array) {
 // Endpoint /app/flips/:number that returns JSON including an array of the raw random flips and a summary.
 app.get('/app/flips/:number', (req, res) => {
     const flips = coinFlips(req.params.number)
-    res.status(200).json({'raw': flips, 'summary': countFlips(flips)})
+    res.status(200).json({'raw': flips,'summary': countFlips(flips)})
     res.type("text/plain")
 });
 
