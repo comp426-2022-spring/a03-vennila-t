@@ -35,7 +35,6 @@ function coinFlip() {
 // or {"flip":"tails"} corresponding to the results of the random coin flip.
 app.get('/app/flip', (req, res) => {
     res.status(200).json({'flip' : coinFlip()})
-    res.type("text/plain")
 });
 
 function coinFlips(flips) {
@@ -76,7 +75,6 @@ function countFlips(array) {
 app.get('/app/flips/:number', (req, res) => {
     const flips = coinFlips(req.params.number)
     res.status(200).json({"raw": flips,"summary": countFlips(flips)})
-    res.type("text/plain")
 });
 
 function flipACoin(call) {
@@ -94,12 +92,10 @@ function flipACoin(call) {
 // Endpoint /app/flip/call/heads that returns the result of a random flip match against heads or tails as JSON.
 app.get('/app/flip/call/:call', (req, res) => {
     res.status(200).json(flipACoin(req.params.call))
-    res.type("text/plain")
 });
 
 
 // Default API endpoint that returns 404 Not found for any endpoints that are not defined.
 app.use(function(req, res){
   res.status(404).send('404 NOT FOUND')
-  res.type("text/plain")
 });
