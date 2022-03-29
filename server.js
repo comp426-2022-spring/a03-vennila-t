@@ -75,7 +75,7 @@ function countFlips(array) {
 // Endpoint /app/flips/:number that returns JSON including an array of the raw random flips and a summary.
 app.get('/app/flips/:number', (req, res) => {
     const flips = coinFlips(req.params.number)
-    res.status(200).json({'raw': flips,'summary': countFlips(flips)})
+    res.status(200).json({"raw": flips,"summary": countFlips(flips)})
     res.type("text/plain")
 });
 
@@ -91,15 +91,9 @@ function flipACoin(call) {
     return "{ call: "+call+", flip: "+flip+", result: "+result+" }";
 }
 
-// Endpoint /app/flip/call/heads that returns the result of a random flip match against heads as JSON.
-app.get('/app/flip/call/heads', (req, res) => {
-    res.status(200).json(flipACoin("heads"))
-    res.type("text/plain")
-});
-
-// Endpoint /app/flip/call/tails that returns the result of a random flip match against tails as JSON.
-app.get('/app/flip/call/tails', (req, res) => {
-    res.status(200).json(flipACoin("tails"))
+// Endpoint /app/flip/call/heads that returns the result of a random flip match against heads or tails as JSON.
+app.get('/app/flip/call/:call', (req, res) => {
+    res.status(200).json(flipACoin(req.params.call))
     res.type("text/plain")
 });
 
