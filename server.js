@@ -3,10 +3,15 @@
 // Require Express.js
 const express = require('express')
 const app = express()
+const args = require('yargs').argv
+
 
 // define port variable
-const port = 5000
+const port = args.port;
 
+if(args.port == 'undefined'){
+  port = 5000;
+}
 // Start an app server
 const server = app.listen(port, () => {
     console.log('App listening on port %PORT%'.replace('%PORT%',port))
