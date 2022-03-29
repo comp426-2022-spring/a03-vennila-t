@@ -1,9 +1,9 @@
 // server.js file that takes an arbitrary port number as a command line argument (i.e. I should be able to run it with node server.js. The port should default to 5000 if no argument is given.
 
 // Require Express.js
-import express from 'express';
+const express = require('express')
 const app = express()
-import { argv as args } from 'yargs';
+const args = require('yargs').argv
 
 
 // define port variable
