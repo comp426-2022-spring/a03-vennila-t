@@ -7,7 +7,7 @@ const args = require('yargs').argv
 
 
 // define port variable
-const port = args.port || process.env.PORT || 5000
+let port;
 
 if (typeof args.port === "undefined") {
   port = 5000;
