@@ -1,21 +1,20 @@
 // server.js file that takes an arbitrary port number as a command line argument (i.e. I should be able to run it with node server.js. The port should default to 5000 if no argument is given.
+import express from 'express'
+import minimist from 'minimist'
+
+var args = minimist(process.argv.slice(2))
 
 // Require Express.js
 const express = require('express')
 const app = express()
-const args = require('yargs').argv
-
 
 // define port variable
-const port = args.port;
+const port = args.port || process.env.PORT || 5000
 
-if(args.port == 'undefined'){
-  port = 5000;
-}
 // Start an app server
 const server = app.listen(port, () => {
     console.log('App listening on port %PORT%'.replace('%PORT%',port))
-});
+})
 
 // Check endpoint at /app/ that returns 200 OK.
 app.get('/app/', (req, res) => {
@@ -25,17 +24,39 @@ app.get('/app/', (req, res) => {
     res.statusMessage = 'OK';
     res.writeHead( res.statusCode, { 'Content-Type' : 'text/plain' });
     res.end(res.statusCode+ ' ' +res.statusMessage)
-});
+})
 
-function coinFlip() {
-    var coin = ["heads", "tails"];
-    return coin[Math.floor(Math.random()*coin.length)];
-  }
 // Endpoint /app/flip/ that returns JSON {"flip":"heads"}
 // or {"flip":"tails"} corresponding to the results of the random coin flip.
 app.get('/app/flip', (req, res) => {
     res.status(200).json({'flip' : coinFlip()})
-});
+})
+
+// Endpoint /app/flips/:number that returns JSON including an array of the raw random flips and a summary.
+app.get('/app/flips/:number', (req, res) => {
+    const flips = coinFlips(req.params.number)
+    res.status(200).json({"raw": flips,"summary": countFlips(flips)})
+})
+
+
+
+// Endpoint /app/flip/call/heads that returns the result of a random flip match against heads or tails as JSON.
+app.get('/app/flip/call/:call', (req, res) => {
+    res.status(200).json(flipACoin(req.params.call))
+})
+
+
+// Default API endpoint that returns 404 Not found for any endpoints that are not defined.
+app.use(function(req, res){
+  res.status(404).send('404 NOT FOUND')
+  res.type("text/plain")
+})
+
+// functions
+function coinFlip() {
+  var coin = ["heads", "tails"];
+  return coin[Math.floor(Math.random()*coin.length)];
+}
 
 function coinFlips(flips) {
     var i = 0;
@@ -71,31 +92,14 @@ function countFlips(array) {
     return "{ heads: "+heads+", tails: "+tails+" }";
 }
 
-// Endpoint /app/flips/:number that returns JSON including an array of the raw random flips and a summary.
-app.get('/app/flips/:number', (req, res) => {
-    const flips = coinFlips(req.params.number)
-    res.status(200).json({"raw": flips,"summary": countFlips(flips)})
-});
-
 function flipACoin(call) {
-    var flip = coinFlip();
-    var result = "";
-    if(call == flip){
-      result = "win";
-    }
-    else{
-      result = "lose";
-    }
-    return "{ call: "+call+", flip: "+flip+", result: "+result+" }";
+  var flip = coinFlip();
+  var result = "";
+  if(call == flip){
+    result = "win";
+  }
+  else{
+    result = "lose";
+  }
+  return "{ call: "+call+", flip: "+flip+", result: "+result+" }";
 }
-
-// Endpoint /app/flip/call/heads that returns the result of a random flip match against heads or tails as JSON.
-app.get('/app/flip/call/:call', (req, res) => {
-    res.status(200).json(flipACoin(req.params.call))
-});
-
-
-// Default API endpoint that returns 404 Not found for any endpoints that are not defined.
-app.use(function(req, res){
-  res.status(404).send('404 NOT FOUND')
-});
