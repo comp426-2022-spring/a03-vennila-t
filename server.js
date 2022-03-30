@@ -1,15 +1,19 @@
 // server.js file that takes an arbitrary port number as a command line argument (i.e. I should be able to run it with node server.js. The port should default to 5000 if no argument is given.
-import express from 'express'
-import minimist from 'minimist'
-
-var args = minimist(process.argv.slice(2))
 
 // Require Express.js
 const express = require('express')
 const app = express()
+const args = require('yargs').argv
+
 
 // define port variable
 const port = args.port || process.env.PORT || 5000
+
+if (typeof args.port === "undefined") {
+  port = 5000;
+} else {
+  port = args.port;
+}
 
 // Start an app server
 const server = app.listen(port, () => {
