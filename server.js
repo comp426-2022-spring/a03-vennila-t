@@ -17,7 +17,7 @@ if (typeof args.port === "undefined") {
 
 // Start an app server
 const server = app.listen(port, () => {
-    console.log('App listening on port %PORT%'.replace('%PORT%',port))
+    // console.log('App listening on port %PORT%'.replace('%PORT%',port))
 })
 
 // Check endpoint at /app/ that returns 200 OK.
