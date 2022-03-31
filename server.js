@@ -17,7 +17,7 @@ if (typeof args.port === "undefined") {
 
 // Start an app server
 const server = app.listen(port, () => {
-    // console.log('App listening on port %PORT%'.replace('%PORT%',port))
+    console.log('App listening on port %PORT%'.replace('%PORT%',port))
 })
 
 // Check endpoint at /app/ that returns 200 OK.
@@ -93,7 +93,7 @@ function countFlips(array) {
     else if(tails == 0){
       return "{ heads: "+heads+" }";
     }
-    return "{ heads: "+heads+", tails: "+tails+" }";
+    return "{ 'heads'+: "+heads+", 'tails': "+tails+" }";
 }
 
 function flipACoin(call) {
@@ -105,5 +105,5 @@ function flipACoin(call) {
   else{
     result = "lose";
   }
-  return "{ call: "+call+", flip: "+flip+", result: "+result+" }";
+  return "{ 'call': "+call+", 'flip': "+flip+", 'result': "+result+" }";
 }
